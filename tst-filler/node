@@ -1,0 +1,14 @@
+#/bin/sh
+
+# Make sure to only specify the --tty/-t option when this command runs in a tty
+PODMAN_OPTIONS=$(if [ -t 0 ]; then echo "-ti"; else echo "-i"; fi)
+
+# Exec the command in the node container
+exec podman run \
+    --rm \
+    "${PODMAN_OPTIONS}" \
+    --volume "$(pwd):$(pwd):z" \
+    -w "$(pwd)" \
+    -e NPM_CONFIG_UPDATE_NOTIFIER=false \
+    node:latest \
+    "$@"
