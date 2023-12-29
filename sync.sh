@@ -13,18 +13,21 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "$SCRIPT_DIR/tr-report-parser"; make install; cd -
 cd "$SCRIPT_DIR/tst-filler"; make install; cd -
 cd "$SCRIPT_DIR/tst-sender"; make install; cd -
+cd "$SCRIPT_DIR/tst-qr"; make install; cd -
 
 # Go over all the pdf in the input folder
 cd "${SCRIPT_DIR}"
 for src_file in "$INPUT_DIR"/*.pdf; do
+    filename=$(basename -- "$src_file")
     dst_file="${OUTPUT_DIR}/"$(basename -- "$src_file")
+    qr_code="${OUTPUT_DIR}/${filename%.*}.png"
 
     # Print progress
     echo "Processing $src_file"
 
-    if stat "$dst_file" &> /dev/null; then
+    if stat "$dst_file" &> /dev/null && stat "$qr_code" &> /dev/null; then
         # Nothing to do, the file already exists
-        echo "$dst_file already exists"
+        echo "$dst_file and $qr_code already exist"
     else
         # Parse tst report
         data=$(./tr-report-parser/venv/bin/python tr-report-parser/extract_report.py "$src_file")
@@ -49,5 +52,13 @@ for src_file in "$INPUT_DIR"/*.pdf; do
             --tax-data - \
             --tax-person data/citizen.json \
             "$dst_file"
+        
+        # Generate qr code for payment
+        echo "$data" | \
+            ./tst-qr/venv/bin/python \
+            tst-qr/create_qrcode.py \
+            --tax-data - \
+            --tax-person data/citizen.json \
+            "$qr_code"
     fi
 done
