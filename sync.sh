@@ -3,8 +3,8 @@
 set -e
 
 # Read input arguments
-INPUT_DIR=$( cd -- "$1" &> /dev/null && pwd )
-OUTPUT_DIR=$( cd -- "$2" &> /dev/null && pwd )
+INPUT_DIR=$( cd -- "$1" > /dev/null && pwd )
+OUTPUT_DIR=$( cd -- "$2" > /dev/null && pwd )
 
 # Resolve the dir where this file belongs
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -28,12 +28,15 @@ for src_file in "$INPUT_DIR"/*.pdf; do
     if stat "$dst_file" &> /dev/null && stat "$qr_code" &> /dev/null; then
         # Nothing to do, the file already exists
         echo "$dst_file and $qr_code already exist"
-    else
-        # Parse tst report
-        data=$(./tr-report-parser/venv/bin/python tr-report-parser/extract_report.py "$src_file")
+        continue
+    fi
 
-        echo "$data"
+    # Parse tst report
+    data=$(./tr-report-parser/venv/bin/python tr-report-parser/extract_report.py "$src_file")
 
+    echo "$data"
+
+    if stat "$dst_file" &> /dev/null; then true; else
         # Fill in tst form
         echo "$data" | \
             ./tst-filler/run \
@@ -53,6 +56,10 @@ for src_file in "$INPUT_DIR"/*.pdf; do
             --tax-person data/citizen.json \
             "$dst_file"
         
+        notify-send tst-sender "Created draft email for $dst_file"
+    fi
+
+    if stat "$qr_code" &> /dev/null; then true; else
         # Generate qr code for payment
         echo "$data" | \
             ./tst-qr/venv/bin/python \
@@ -60,5 +67,7 @@ for src_file in "$INPUT_DIR"/*.pdf; do
             --tax-data - \
             --tax-person data/citizen.json \
             "$qr_code"
+        
+        notify-send tst-qr "Created payment qr code: $qr_code"
     fi
 done

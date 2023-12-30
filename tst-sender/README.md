@@ -2,7 +2,7 @@
 
 **Prerequisites**:
 1. Have python>=3.10 installed on your system
-2. A project on the google console, with access to the gmail api: https://console.cloud.google.com
+2. A project on the google console, with access to the gmail api: https://console.cloud.google.com/workspace-api
 
 **Install dependencies**:  
 ```bash
