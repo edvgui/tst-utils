@@ -10,34 +10,31 @@ Help()
    echo "Tool to fill in belgian TST file from trade republic monthly report."
    echo "This tool also creates a draft mail with the generated document and a qr code to pay the tax."
    echo
-   echo "Syntax: sh sync.sh [-h|i|o|s|p|c]"
+   echo "Syntax: sh sync.sh [-h|s|p|c] input_folder output_folder"
    echo "options:"
    echo "h     Display this help and exit."
-   echo "i     Set the input folder for the pdf(s), default value is 'input'."
-   echo "o     Set the output folder for the generated pdf(s) and qr code, default value is 'output'."
    echo "s     Set the signature image file path, default value is 'data/signature.jpg'."
    echo "p     Set the personal informations json file path, default value is 'data/citizen.json'."
    echo "c     Set the Gmail credentials json file path, default value is 'data/credentials.json'."
+   echo "arguments:"
+   echo "input_folder     Set the input folder for the pdf(s), default value is 'input'."
+   echo "output_folder    Set the output folder for the generated pdf(s) and qr code, default value is 'output'."
+   echo
+   echo "Please make sure to provide options before arguments."
    echo
 }
 
-# Set default values for input arguments
-INPUT_DIR=$( cd -- "input" > /dev/null && pwd )
-OUTPUT_DIR=$( cd -- "output" > /dev/null && pwd )
+# Set default values for options
 SIGNATURE_FILE="$(pwd)/data/signature.jpg"
 PERSONAL_INFOS_FILE="$(pwd)/data/citizen.json"
 CREDENTIALS_FILE="$(pwd)/data/credentials.json"
 
 # Traverse arguments
-while getopts ":hi:o:s:p:c:" option; do
+while getopts ":hs:p:c:" option; do
    case $option in
       h) # display Help
         Help
         exit;;
-      i) # Input folder
-        INPUT_DIR=$( cd -- "$OPTARG" > /dev/null && pwd );;
-      o) # Output folder
-        OUTPUT_DIR=$( cd -- "$OPTARG" > /dev/null && pwd );;
       s) # Signature file
         SIGNATURE_FILE="$(pwd)/$OPTARG";;
       p) # Personal informations file
@@ -50,6 +47,34 @@ while getopts ":hi:o:s:p:c:" option; do
         exit;;
    esac
 done
+
+echo " ________  ______   ________       __    __  ________  ______  __         ______  ";
+echo "/        |/      \ /        |     /  |  /  |/        |/      |/  |       /      \ ";
+echo "\$\$\$\$\$\$\$\$//\$\$\$\$\$\$  |\$\$\$\$\$\$\$\$/      \$\$ |  \$\$ |\$\$\$\$\$\$\$\$/ \$\$\$\$\$\$/ \$\$ |      /\$\$\$\$\$\$  |";
+echo "   \$\$ |  \$\$ \__\$\$/    \$\$ | ______ \$\$ |  \$\$ |   \$\$ |     \$\$ |  \$\$ |      \$\$ \__\$\$/ ";
+echo "   \$\$ |  \$\$      \    \$\$ |/      |\$\$ |  \$\$ |   \$\$ |     \$\$ |  \$\$ |      \$\$      \ ";
+echo "   \$\$ |   \$\$\$\$\$\$  |   \$\$ |\$\$\$\$\$\$/ \$\$ |  \$\$ |   \$\$ |     \$\$ |  \$\$ |       \$\$\$\$\$\$  |";
+echo "   \$\$ |  /  \__\$\$ |   \$\$ |        \$\$ \__\$\$ |   \$\$ |    _\$\$ |_ \$\$ |_____ /  \__\$\$ |";
+echo "   \$\$ |  \$\$    \$\$/    \$\$ |        \$\$    \$\$/    \$\$ |   / \$\$   |\$\$       |\$\$    \$\$/ ";
+echo "   \$\$/    \$\$\$\$\$\$/     \$\$/          \$\$\$\$\$\$/     \$\$/    \$\$\$\$\$\$/ \$\$\$\$\$\$\$\$/  \$\$\$\$\$\$/  ";
+echo "                                                                                  ";
+
+# shift (remove) all the processed parameters (variable $OPTIND)
+shift $(($OPTIND - 1))
+
+# Read input and output folder arguments
+INPUT_DIR=$( cd -- "$1" > /dev/null && pwd )
+
+if [ -z "$2" ]; 
+then 
+  # If output folder is not set, default to 'output'
+  OUTPUT_DIR="$(pwd)/output"; 
+else
+  OUTPUT_DIR="$(pwd)/$2"
+fi
+
+# Create output dir if only if it doesn't exist
+mkdir -p $OUTPUT_DIR
 
 # Resolve the dir where this file belongs
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
