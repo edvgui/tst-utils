@@ -10,7 +10,7 @@ Help()
    echo "Tool to fill in belgian TST file from trade republic monthly report."
    echo "This tool also creates a draft mail with the generated document and a qr code to pay the tax."
    echo
-   echo "Syntax: sh sync.sh [-h|s|p|c] input_folder output_folder"
+   echo "Syntax: sh sync.sh [-h|s|p|c] input_folder [output_folder]"
    echo "options:"
    echo "h     Display this help and exit."
    echo "s     Set the signature image file path, default value is 'data/signature.jpg'."
@@ -73,7 +73,7 @@ else
   OUTPUT_DIR="$(pwd)/$2"
 fi
 
-# Create output dir if only if it doesn't exist
+# Create output dir only if it doesn't exist
 mkdir -p $OUTPUT_DIR
 
 # Resolve the dir where this file belongs

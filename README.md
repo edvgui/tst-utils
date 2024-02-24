@@ -18,9 +18,9 @@ Some tweaking with the gmail api is also necessary, see [tst-sender-readme](./ts
 ## Input files 
 
 The script requires various input files in order to generate a correct TST pdf.
-The complete list with is the following:
+The complete list is the following:
 
-- Personal file informations as json file with the following format:
+- Personal information file, as json payload, with the following format:
 ```
 {
     "fullName": "FIRSTNAME LASTNAME",
@@ -44,7 +44,7 @@ sh sync.sh
 The options are defined as follow:
 
 ```
-[xxxxxx@xxxxxx tst-utils-riushda]$ sh sync.sh -h
+[xxxxxx@xxxxxx tst-utils]$ sh sync.sh -h
 Tool to fill in belgian TST file from trade republic monthly report.
 This tool also creates a draft mail with the generated document and a qr code to pay the tax.
 
@@ -52,7 +52,7 @@ Syntax: sh sync.sh [-h|s|p|c] input_folder output_folder
 options:
 h     Display this help and exit.
 s     Set the signature image file path, default value is 'data/signature.jpg'.
-p     Set the personal informations json file path, default value is 'data/citizen.json'.
+p     Set the personal information json file path, default value is 'data/citizen.json'.
 c     Set the Gmail credentials json file path, default value is 'data/credentials.json'.
 arguments:
 input_folder     Set the input folder for the pdf(s), default value is 'input'.
