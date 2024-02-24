@@ -48,11 +48,11 @@ The options are defined as follow:
 Tool to fill in belgian TST file from trade republic monthly report.
 This tool also creates a draft mail with the generated document and a qr code to pay the tax.
 
-Syntax: sh sync.sh [-h|s|p|c] input_folder output_folder
+Syntax: sh sync.sh [-h|s|p|c] input_folder [output_folder]
 options:
 h     Display this help and exit.
 s     Set the signature image file path, default value is 'data/signature.jpg'.
-p     Set the personal information json file path, default value is 'data/citizen.json'.
+p     Set the personal informations json file path, default value is 'data/citizen.json'.
 c     Set the Gmail credentials json file path, default value is 'data/credentials.json'.
 arguments:
 input_folder     Set the input folder for the pdf(s), default value is 'input'.
