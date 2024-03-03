@@ -55,7 +55,7 @@ s     Set the signature image file path, default value is 'data/signature.jpg'.
 p     Set the personal informations json file path, default value is 'data/citizen.json'.
 c     Set the Gmail credentials json file path, default value is 'data/credentials.json'.
 arguments:
-input_folder     Set the input folder for the pdf(s), default value is 'input'.
+input_folder     Set the input folder for the pdf(s), this argument is mandatory.
 output_folder    Set the output folder for the generated pdf(s) and qr code, default value is 'output'.
 
 Please make sure to provide options before arguments.

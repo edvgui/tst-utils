@@ -17,7 +17,7 @@ Help()
    echo "p     Set the personal informations json file path, default value is 'data/citizen.json'."
    echo "c     Set the Gmail credentials json file path, default value is 'data/credentials.json'."
    echo "arguments:"
-   echo "input_folder     Set the input folder for the pdf(s), default value is 'input'."
+   echo "input_folder     Set the input folder for the pdf(s), this argument is mandatory."
    echo "output_folder    Set the output folder for the generated pdf(s) and qr code, default value is 'output'."
    echo
    echo "Please make sure to provide options before arguments."
@@ -64,6 +64,12 @@ echo "                                                                          
 shift $(($OPTIND - 1))
 
 # Read input and output folder arguments
+if [ -z "$1" ]; then
+  # If input folder is not set, fail.
+  echo "Please provide at least an input folder as argument."
+  exit 1
+fi
+
 INPUT_DIR=$( cd -- "$1" > /dev/null && pwd )
 
 if [ -z "$2" ]; 
