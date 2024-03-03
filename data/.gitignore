@@ -1,5 +1,6 @@
 *.pdf
 *.jpg
 *.json
+*.png
 
 !form-original.pdf
