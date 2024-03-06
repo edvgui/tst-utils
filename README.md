@@ -54,6 +54,8 @@ h     Display this help and exit.
 s     Set the signature image file path, default value is 'data/signature.jpg'.
 p     Set the personal informations json file path, default value is 'data/citizen.json'.
 c     Set the Gmail credentials json file path, default value is 'data/credentials.json'.
+d     Set the Google drive folder to retrieve the pdf(s) from, default value is 'trade_republic'.
+      This will download all the pdfs in the provided input_folder argument.
 arguments:
 input_folder     Set the input folder for the pdf(s), this argument is mandatory.
 output_folder    Set the output folder for the generated pdf(s) and qr code, default value is 'output'.

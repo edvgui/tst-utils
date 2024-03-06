@@ -16,6 +16,8 @@ Help()
    echo "s     Set the signature image file path, default value is 'data/signature.jpg'."
    echo "p     Set the personal informations json file path, default value is 'data/citizen.json'."
    echo "c     Set the Gmail credentials json file path, default value is 'data/credentials.json'."
+   echo "d     Set the Google drive folder to retrieve the pdf(s) from, default value is 'trade_republic'."
+   echo "      This will download all the pdfs in the provided input_folder argument."
    echo "arguments:"
    echo "input_folder     Set the input folder for the pdf(s), this argument is mandatory."
    echo "output_folder    Set the output folder for the generated pdf(s) and qr code, default value is 'output'."
@@ -30,7 +32,7 @@ PERSONAL_INFOS_FILE="$(pwd)/data/citizen.json"
 CREDENTIALS_FILE="$(pwd)/data/credentials.json"
 
 # Traverse arguments
-while getopts ":hs:p:c:" option; do
+while getopts ":hs:p:c:d:" option; do
    case $option in
       h) # display Help
         Help
@@ -41,6 +43,8 @@ while getopts ":hs:p:c:" option; do
         PERSONAL_INFOS_FILE="$(pwd)/$OPTARG";;
       c) # Gmail credentials file
         CREDENTIALS_FILE="$(pwd)/$OPTARG";;
+      d) # Google drive folder
+        GOOGLE_DRIVE_FOLDER=$OPTARG;;
       \?) # Invalid option
         echo "Error: Invalid option '-$OPTARG'"
         echo "Run 'sh sync.sh -h' to get more information about existing options."
@@ -87,10 +91,21 @@ mkdir -p $OUTPUT_DIR
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Initial setup, make sure that everything is installed
+cd "$SCRIPT_DIR/tr-report-loader"; make install; cd -
 cd "$SCRIPT_DIR/tr-report-parser"; make install; cd -
 cd "$SCRIPT_DIR/tst-filler"; make install; cd -
 cd "$SCRIPT_DIR/tst-sender"; make install; cd -
 cd "$SCRIPT_DIR/tst-qr"; make install; cd -
+
+if [ -n "$GOOGLE_DRIVE_FOLDER" ]; then
+  # Download pdf report(s) to input folder
+  ./tr-report-loader/venv/bin/python \
+  "tr-report-loader/load_report.py" \
+  --app-credentials $CREDENTIALS_FILE \
+  --tr-drive-folder $GOOGLE_DRIVE_FOLDER \
+  --tr-output-path $INPUT_DIR \
+  --tr-delete
+fi
 
 # Go over all the pdf in the input folder
 cd "${SCRIPT_DIR}"
