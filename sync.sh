@@ -134,6 +134,7 @@ for src_file in "$INPUT_DIR"/*.pdf; do
             "$dst_file"
         
         notify-send tst-sender "Created draft email for $dst_file"
+        xdg-open https://mail.google.com/mail/u/0/#drafts || true
     fi
 
     if stat "$qr_code" &> /dev/null; then true; else
@@ -144,7 +145,8 @@ for src_file in "$INPUT_DIR"/*.pdf; do
             --tax-data - \
             --tax-person $PERSONAL_INFOS_FILE \
             "$qr_code"
-        
-        xdg-open "$qr_code"
+
+        notify-send tst-qr "Created payment qr code at $qr_code"
+        xdg-open "$qr_code" || true
     fi
 done
