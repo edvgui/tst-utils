@@ -145,6 +145,6 @@ for src_file in "$INPUT_DIR"/*.pdf; do
             --tax-person $PERSONAL_INFOS_FILE \
             "$qr_code"
         
-        notify-send tst-qr "Created payment qr code: $qr_code"
+        xdg-open "$qr_code"
     fi
 done
