@@ -77,7 +77,7 @@ then
   # If output folder is not set, default to 'output'
   OUTPUT_DIR="$(pwd)/output"; 
 else
-  OUTPUT_DIR="$(pwd)/$2"
+  OUTPUT_DIR=$( cd -- "$2" > /dev/null && pwd )
 fi
 
 # Create output dir only if it doesn't exist
@@ -145,6 +145,6 @@ for src_file in "$INPUT_DIR"/*.pdf; do
             --tax-person $PERSONAL_INFOS_FILE \
             "$qr_code"
         
-        notify-send tst-qr "Created payment qr code: $qr_code"
+        xdg-open "$qr_code"
     fi
 done
