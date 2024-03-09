@@ -1,4 +1,4 @@
-# Send tst form
+# Download tax report from google drive
 
 **Prerequisites**:
 1. Have python>=3.10 installed on your system
@@ -15,7 +15,7 @@ cf. https://developers.google.com/drive/api/quickstart/python
 
 **Run tool**:  
 ```console
-$ tr_report_loader/venv/bin/python tr_report_loader/load_report.py --help
+$ tr-report-loader/venv/bin/python tr-report-loader/load_report.py --help
 Usage: load_report.py [OPTIONS]
 
   Retrieve input file from google drive.
