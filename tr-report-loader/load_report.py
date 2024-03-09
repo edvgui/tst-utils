@@ -14,17 +14,17 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
 
 
-
 # If modifying these scopes, delete the file token.json.
 SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
+
 def load_token(token_file: pathlib.Path) -> google.oauth2.credentials.Credentials:
     """
     Load the token from the given file, if it expired, refresh it.
     Always write the token back to the file (even if it is not refreshed).
-    
+
     :param token_file: The file that should contain the token to authenticate
         the user of the mail box.
     """
@@ -48,7 +48,9 @@ def load_token(token_file: pathlib.Path) -> google.oauth2.credentials.Credential
     return creds
 
 
-def load_credentials(credentials: pathlib.Path) -> google.oauth2.credentials.Credentials:
+def load_credentials(
+    credentials: pathlib.Path,
+) -> google.oauth2.credentials.Credentials:
     """
     Load google credentials for the app.  This will require manual authorization from the
     user on the first attempt.
@@ -64,15 +66,18 @@ def load_credentials(credentials: pathlib.Path) -> google.oauth2.credentials.Cre
 
     # Token file doesn't exist, or isn't valid anymore.
     # This is the original authorization, we need to ask the user to authenticate to its account
-    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(str(credentials), SCOPES)
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+        str(credentials), SCOPES
+    )
     creds = flow.run_local_server(port=0)
     token_file.write_text(creds.to_json())
 
     return load_token(token_file)
 
+
 def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> None:
     """
-    Download files to output_folder, the file metadata must be a dict of format {"id": <str>, "name": <str>} 
+    Download files to output_folder, the file metadata must be a dict of format {"id": <str>, "name": <str>}
     """
     try:
         request = service.files().get_media(fileId=file_metadata["id"])
@@ -88,7 +93,7 @@ def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> 
         file = None
 
     file.seek(0)
-    with open(output_folder / file_metadata["name"], 'wb') as f:
+    with open(output_folder / file_metadata["name"], "wb") as f:
         shutil.copyfileobj(file, f, length=131072)
 
 
@@ -99,17 +104,27 @@ def get_tr_reports(service, folder: str) -> list[dict]:
     The return type is a list of files metadata as dicts of the format {"id": <str>, "name": <str>}
     """
 
-    folderId = service.files().list(q = f"mimeType = 'application/vnd.google-apps.folder' and name = '{folder}'", fields="files(id, name)").execute()
-    folderIdResult = folderId.get('files', [])
+    folderId = (
+        service.files()
+        .list(
+            q=f"mimeType = 'application/vnd.google-apps.folder' and name = '{folder}'",
+            fields="files(id, name)",
+        )
+        .execute()
+    )
+    folderIdResult = folderId.get("files", [])
     if len(folderIdResult) == 0:
         return []
-    id = folderIdResult[0].get('id')
+    id = folderIdResult[0].get("id")
 
-    results = service.files().list(q = f"'{id}' in parents", fields="files(id, name)").execute()
-    files = results.get('files', [])
+    results = (
+        service.files().list(q=f"'{id}' in parents", fields="files(id, name)").execute()
+    )
+    files = results.get("files", [])
 
     pattern = re.compile(r"pb[0-9]+[.]pdf$")
     return [file for file in files if pattern.match(file["name"])]
+
 
 @click.command()
 @click.option(
@@ -155,11 +170,13 @@ def main(
     creds = load_credentials(pathlib.Path(app_credentials))
 
     # Call the Google Drive API
-    service = googleapiclient.discovery.build('drive', 'v3', credentials=creds)
+    service = googleapiclient.discovery.build("drive", "v3", credentials=creds)
     tr_reports = get_tr_reports(service, folder=tr_drive_folder)
-    
+
     for report in tr_reports:
-        download_file(service, file_metadata=report, output_folder=pathlib.Path(tr_output_path))
+        download_file(
+            service, file_metadata=report, output_folder=pathlib.Path(tr_output_path)
+        )
         if tr_delete:
             # Caution, this will permanently delete the file without moving it to trash
             service.files().delete(fileId=report["id"]).execute()
