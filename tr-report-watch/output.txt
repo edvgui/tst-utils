@@ -1,0 +1,128 @@
+ ________  ______   ________      __    __  ________  ______  __        ______  
+/        |/      \ /        |    /  |  /  |/        |/      |/  |      /      \ 
+$$$$$$$$//$$$$$$  |$$$$$$$$/     $$ |  $$ |$$$$$$$$/ $$$$$$/ $$ |     /$$$$$$  |
+   $$ |  $$ \__$$/    $$ | _____ $$ |  $$ |   $$ |     $$ |  $$ |     $$ \__$$/ 
+   $$ |  $$      \    $$ |/     |$$ |  $$ |   $$ |     $$ |  $$ |     $$      \ 
+   $$ |   $$$$$$  |   $$ |$$$$$/ $$ |  $$ |   $$ |     $$ |  $$ |      $$$$$$  |
+   $$ |  /  \__$$ |   $$ |       $$ \__$$ |   $$ |    _$$ |_ $$ |____ /  \__$$ |
+   $$ |  $$    $$/    $$ |       $$    $$/    $$ |   / $$   |$$      |$$    $$/ 
+   $$/    $$$$$$/     $$/         $$$$$$/     $$/    $$$$$$/ $$$$$$$/  $$$$$$/  
+                                                                                
+                                                                                
+venv/bin/pip install -U --upgrade-strategy=eager -r requirements.txt
+Requirement already satisfied: google-api-python-client==2.111.0 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 1)) (2.111.0)
+Requirement already satisfied: google-auth-httplib2==0.2.0 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 2)) (0.2.0)
+Requirement already satisfied: google-auth-oauthlib==1.2.0 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 3)) (1.2.0)
+Requirement already satisfied: click==8.1.7 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 4)) (8.1.7)
+Requirement already satisfied: httplib2<1.dev0,>=0.15.0 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (0.22.0)
+Requirement already satisfied: google-auth<3.0.0.dev0,>=1.19.0 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.28.2)
+Requirement already satisfied: google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.17.1)
+Requirement already satisfied: uritemplate<5,>=3.0.1 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (4.1.1)
+Requirement already satisfied: requests-oauthlib>=0.7.0 in ./venv/lib64/python3.12/site-packages (from google-auth-oauthlib==1.2.0->-r requirements.txt (line 3)) (1.3.1)
+Requirement already satisfied: googleapis-common-protos<2.0.dev0,>=1.56.2 in ./venv/lib64/python3.12/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (1.62.0)
+Requirement already satisfied: protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0.dev0,>=3.19.5 in ./venv/lib64/python3.12/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (4.25.3)
+Requirement already satisfied: requests<3.0.0.dev0,>=2.18.0 in ./venv/lib64/python3.12/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.31.0)
+Requirement already satisfied: cachetools<6.0,>=2.0.0 in ./venv/lib64/python3.12/site-packages (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (5.3.3)
+Requirement already satisfied: pyasn1-modules>=0.2.1 in ./venv/lib64/python3.12/site-packages (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (0.3.0)
+Requirement already satisfied: rsa<5,>=3.1.4 in ./venv/lib64/python3.12/site-packages (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (4.9)
+Requirement already satisfied: pyparsing!=3.0.0,!=3.0.1,!=3.0.2,!=3.0.3,<4,>=2.4.2 in ./venv/lib64/python3.12/site-packages (from httplib2<1.dev0,>=0.15.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (3.1.2)
+Requirement already satisfied: oauthlib>=3.0.0 in ./venv/lib64/python3.12/site-packages (from requests-oauthlib>=0.7.0->google-auth-oauthlib==1.2.0->-r requirements.txt (line 3)) (3.2.2)
+Requirement already satisfied: pyasn1<0.6.0,>=0.4.6 in ./venv/lib64/python3.12/site-packages (from pyasn1-modules>=0.2.1->google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (0.5.1)
+Requirement already satisfied: charset-normalizer<4,>=2 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (3.3.2)
+Requirement already satisfied: idna<4,>=2.5 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (3.6)
+Requirement already satisfied: urllib3<3,>=1.21.1 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.2.1)
+Requirement already satisfied: certifi>=2017.4.17 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2024.2.2)
+
+[notice] A new release of pip is available: 23.2.1 -> 24.0
+[notice] To update, run: python -m pip install --upgrade pip
+/home/riushda/Documents/trade_republic/tst-utils-riushda
+venv/bin/pip install -U --upgrade-strategy=eager -r requirements.txt
+Requirement already satisfied: pypdf==3.8.1 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 1)) (3.8.1)
+Requirement already satisfied: click==8.1.7 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 2)) (8.1.7)
+
+[notice] A new release of pip is available: 23.2.1 -> 24.0
+[notice] To update, run: python -m pip install --upgrade pip
+/home/riushda/Documents/trade_republic/tst-utils-riushda
+./npm install --also-dev
+[?25l[[107;97m#########[0m[100;90m.........[0m] / idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[[107;97m#########[0m[100;90m.........[0m] - idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[[107;97m#########[0m[100;90m.........[0m] - idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[[107;97m#########[0m[100;90m.........[0m] - idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[[107;97m#########[0m[100;90m.........[0m] - idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[[107;97m#########[0m[100;90m.........[0m] - idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[[107;97m#########[0m[100;90m.........[0m] - idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[[107;97m#########[0m[100;90m.........[0m] - idealTree: [32;40mtiming[0m [35midealTree[0m Completed in 22ms[0m[K[K[?25h
+up to date, audited 27 packages in 610ms
+
+found [32m[1m0[22m[39m vulnerabilities
+/home/riushda/Documents/trade_republic/tst-utils-riushda
+venv/bin/pip install -U --upgrade-strategy=eager -r requirements.txt
+Requirement already satisfied: google-api-python-client==2.111.0 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 1)) (2.111.0)
+Requirement already satisfied: google-auth-httplib2==0.2.0 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 2)) (0.2.0)
+Requirement already satisfied: google-auth-oauthlib==1.2.0 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 3)) (1.2.0)
+Requirement already satisfied: click==8.1.7 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 4)) (8.1.7)
+Requirement already satisfied: httplib2<1.dev0,>=0.15.0 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (0.22.0)
+Requirement already satisfied: google-auth<3.0.0.dev0,>=1.19.0 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.28.2)
+Requirement already satisfied: google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.17.1)
+Requirement already satisfied: uritemplate<5,>=3.0.1 in ./venv/lib64/python3.12/site-packages (from google-api-python-client==2.111.0->-r requirements.txt (line 1)) (4.1.1)
+Requirement already satisfied: requests-oauthlib>=0.7.0 in ./venv/lib64/python3.12/site-packages (from google-auth-oauthlib==1.2.0->-r requirements.txt (line 3)) (1.3.1)
+Requirement already satisfied: googleapis-common-protos<2.0.dev0,>=1.56.2 in ./venv/lib64/python3.12/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (1.62.0)
+Requirement already satisfied: protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0.dev0,>=3.19.5 in ./venv/lib64/python3.12/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (4.25.3)
+Requirement already satisfied: requests<3.0.0.dev0,>=2.18.0 in ./venv/lib64/python3.12/site-packages (from google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.31.0)
+Requirement already satisfied: cachetools<6.0,>=2.0.0 in ./venv/lib64/python3.12/site-packages (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (5.3.3)
+Requirement already satisfied: pyasn1-modules>=0.2.1 in ./venv/lib64/python3.12/site-packages (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (0.3.0)
+Requirement already satisfied: rsa<5,>=3.1.4 in ./venv/lib64/python3.12/site-packages (from google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (4.9)
+Requirement already satisfied: pyparsing!=3.0.0,!=3.0.1,!=3.0.2,!=3.0.3,<4,>=2.4.2 in ./venv/lib64/python3.12/site-packages (from httplib2<1.dev0,>=0.15.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (3.1.2)
+Requirement already satisfied: oauthlib>=3.0.0 in ./venv/lib64/python3.12/site-packages (from requests-oauthlib>=0.7.0->google-auth-oauthlib==1.2.0->-r requirements.txt (line 3)) (3.2.2)
+Requirement already satisfied: pyasn1<0.6.0,>=0.4.6 in ./venv/lib64/python3.12/site-packages (from pyasn1-modules>=0.2.1->google-auth<3.0.0.dev0,>=1.19.0->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (0.5.1)
+Requirement already satisfied: charset-normalizer<4,>=2 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (3.3.2)
+Requirement already satisfied: idna<4,>=2.5 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (3.6)
+Requirement already satisfied: urllib3<3,>=1.21.1 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2.2.1)
+Requirement already satisfied: certifi>=2017.4.17 in ./venv/lib64/python3.12/site-packages (from requests<3.0.0.dev0,>=2.18.0->google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5->google-api-python-client==2.111.0->-r requirements.txt (line 1)) (2024.2.2)
+
+[notice] A new release of pip is available: 23.2.1 -> 24.0
+[notice] To update, run: python -m pip install --upgrade pip
+/home/riushda/Documents/trade_republic/tst-utils-riushda
+venv/bin/pip install -U --upgrade-strategy=eager -r requirements.txt
+Requirement already satisfied: qrcode[pil]==7.4.2 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 1)) (7.4.2)
+Requirement already satisfied: click==8.1.7 in ./venv/lib64/python3.12/site-packages (from -r requirements.txt (line 2)) (8.1.7)
+Requirement already satisfied: typing-extensions in ./venv/lib64/python3.12/site-packages (from qrcode[pil]==7.4.2->-r requirements.txt (line 1)) (4.10.0)
+Requirement already satisfied: pypng in ./venv/lib64/python3.12/site-packages (from qrcode[pil]==7.4.2->-r requirements.txt (line 1)) (0.20220715.0)
+Requirement already satisfied: pillow>=9.1.0 in ./venv/lib64/python3.12/site-packages (from qrcode[pil]==7.4.2->-r requirements.txt (line 1)) (10.2.0)
+
+[notice] A new release of pip is available: 23.2.1 -> 24.0
+[notice] To update, run: python -m pip install --upgrade pip
+/home/riushda/Documents/trade_republic/tst-utils-riushda
+Download 100.
+Processing /home/riushda/Documents/trade_republic/tst-utils-riushda/input/data.pdf
+{
+  "month": 1,
+  "year": 2024,
+  "products": [
+    {
+      "stockType": "STOCKS",
+      "stockTax": 0.35,
+      "taxBasis": 12149.96,
+      "taxAmount": 42.53,
+      "transactionCount": 8
+    }
+  ]
+}
+npm WARN exec The following package was not found and will be installed: ts-node@10.9.2
+Traceback (most recent call last):
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/send_tst.py", line 214, in <module>
+    main()
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/venv/lib64/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/venv/lib64/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/venv/lib64/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/venv/lib64/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/send_tst.py", line 191, in main
+    sender = service.users().getProfile(userId="me").execute()["emailAddress"]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/venv/lib64/python3.12/site-packages/googleapiclient/_helpers.py", line 130, in positional_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/riushda/Documents/trade_republic/tst-utils-riushda/tst-sender/venv/lib64/python3.12/site-packages/googleapiclient/http.py", line 938, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 403 when requesting https://gmail.googleapis.com/gmail/v1/users/me/profile?alt=json returned "Request had insufficient authentication scopes.". Details: "[{'message': 'Insufficient Permission', 'domain': 'global', 'reason': 'insufficientPermissions'}]">

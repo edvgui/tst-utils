@@ -12,68 +12,12 @@ import google.auth.exceptions
 import googleapiclient.discovery
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
-
+from google_api import load_credentials
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
-
-
-def load_token(token_file: pathlib.Path) -> google.oauth2.credentials.Credentials:
-    """
-    Load the token from the given file, if it expired, refresh it.
-    Always write the token back to the file (even if it is not refreshed).
-
-    :param token_file: The file that should contain the token to authenticate
-        the user of the mail box.
-    """
-    creds = google.oauth2.credentials.Credentials.from_authorized_user_file(
-        str(token_file),
-        SCOPES,
-    )
-
-    if creds.expired and creds.refresh_token:
-        # If the credentials expired, refresh them
-        creds.refresh(google.auth.transport.requests.Request())
-
-    if not creds.valid:
-        # If at this point the credentials are still not valid, raise an error.
-        # Also remove the token file, as it is not valid anymore.
-        raise RuntimeError("Unauthorized: failed to refresh to the credentials")
-
-    # Save the token in the token file, so that it can be reused next time
-    token_file.write_text(creds.to_json())
-
-    return creds
-
-
-def load_credentials(
-    credentials: pathlib.Path,
-) -> google.oauth2.credentials.Credentials:
-    """
-    Load google credentials for the app.  This will require manual authorization from the
-    user on the first attempt.
-
-    :param credentials: The credentials file to load.
-    """
-    token_file = credentials.parent / "token.json"
-    if token_file.exists():
-        try:
-            return load_token(token_file)
-        except (RuntimeError, google.auth.exceptions.GoogleAuthError):
-            token_file.unlink(missing_ok=True)
-
-    # Token file doesn't exist, or isn't valid anymore.
-    # This is the original authorization, we need to ask the user to authenticate to its account
-    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-        str(credentials), SCOPES
-    )
-    creds = flow.run_local_server(port=0)
-    token_file.write_text(creds.to_json())
-
-    return load_token(token_file)
-
 
 def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> None:
     """
@@ -97,28 +41,28 @@ def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> 
         shutil.copyfileobj(file, f, length=131072)
 
 
-def get_tr_reports(service, folder: str) -> list[dict]:
+def get_tr_reports(service, folder_name: str) -> list[dict]:
     """
-    Get the Trade republic reports that are in a specific folder
+    Get the Trade republic reports that are in a specific folder using google drive service object.
 
     The return type is a list of files metadata as dicts of the format {"id": <str>, "name": <str>}
     """
 
-    folderId = (
+    folder_dict = (
         service.files()
         .list(
-            q=f"mimeType = 'application/vnd.google-apps.folder' and name = '{folder}'",
+            q=f"mimeType = 'application/vnd.google-apps.folder' and name = '{folder_name}'",
             fields="files(id, name)",
         )
         .execute()
     )
-    folderIdResult = folderId.get("files", [])
-    if len(folderIdResult) == 0:
+    folderResult = folder_dict.get("files", [])
+    if len(folderResult) == 0:
         return []
-    id = folderIdResult[0].get("id")
+    folder_id = folderResult[0].get("id")
 
     results = (
-        service.files().list(q=f"'{id}' in parents", fields="files(id, name)").execute()
+        service.files().list(q=f"'{folder_id}' in parents", fields="files(id, name)").execute()
     )
     files = results.get("files", [])
 
@@ -163,15 +107,17 @@ def main(
 
     Arguments:
 
-        TR_PATH: Path to the Trade Republic report in google drive.
+        TR_DRIVE_FOLDER : Path to the Trade Republic report in google drive.
+        TR_OUTPUT_PATH: Path to the folder where the trade republic report should be downloaded.
+        TR_DELETE: Boolean indicating if the report should be deleted in google drive after download.
 
     """
 
-    creds = load_credentials(pathlib.Path(app_credentials))
+    creds = load_credentials(pathlib.Path(app_credentials), SCOPES)
 
     # Call the Google Drive API
     service = googleapiclient.discovery.build("drive", "v3", credentials=creds)
-    tr_reports = get_tr_reports(service, folder=tr_drive_folder)
+    tr_reports = get_tr_reports(service, folder_name=tr_drive_folder)
 
     for report in tr_reports:
         download_file(
