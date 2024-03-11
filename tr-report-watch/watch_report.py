@@ -19,14 +19,13 @@ from googleapiclient.errors import HttpError
 from helpers.google_api import load_credentials, get_tr_reports
 
 """
-TODO 1) find a way to handle global scopes for google services (token gets overwritten with different scopes everytime)
-     2) finish tr-report-watch (readme and maybe other files) + test it more
-     3) make proper watch.sh tools (with arguments, ...)
-     4) Figure out how to cleanup input and output after a run
-     5) Check what happens with xdg-open when running in standard terminal (headless) and 
+TODO 1) finish tr-report-watch (readme and maybe other files) + test it more
+     2) make proper watch.sh tools (with arguments, ...)
+     3) Figure out how to cleanup input and output after a run
+     4) Check what happens with xdg-open when running in standard terminal (headless) and 
         figure out a way to easily get the qr code when running in containers (gmail, ...)
-     6) Create dockerfile for the repo (with watch.sh as entrypoint)
-     7) update global readme with new features
+     5) Create dockerfile for the repo (with watch.sh as entrypoint)
+     6) update global readme with new features
 """
 
 @dataclass
