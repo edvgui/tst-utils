@@ -99,8 +99,8 @@ cd "$SCRIPT_DIR/tst-qr"; make install; cd -
 
 if [ -n "$GOOGLE_DRIVE_FOLDER" ]; then
   # Download pdf report(s) to input folder
-  ./tr-report-loader/venv/bin/python \
-  "tr-report-loader/load_report.py" \
+  ./tr-report-loader/venv/bin/python -m \
+  "tr-report-loader.load_report.py" \
   --app-credentials $CREDENTIALS_FILE \
   --tr-drive-folder $GOOGLE_DRIVE_FOLDER \
   --tr-output-path $INPUT_DIR \
@@ -124,7 +124,7 @@ for src_file in "$INPUT_DIR"/*.pdf; do
     fi
 
     # Parse tst report
-    data=$(./tr-report-parser/venv/bin/python tr-report-parser/extract_report.py "$src_file")
+    data=$(./tr-report-parser/venv/bin/python -m tr-report-parser.extract_report "$src_file")
 
     echo "$data"
 
@@ -141,8 +141,8 @@ for src_file in "$INPUT_DIR"/*.pdf; do
 
         # Prepare draft email
         echo "$data" | \
-            ./tst-sender/venv/bin/python \
-            tst-sender/send_tst.py \
+            ./tst-sender/venv/bin/python -m \
+            tst-sender.send_tst \
             --app-credentials $CREDENTIALS_FILE \
             --tax-data - \
             --tax-person $PERSONAL_INFOS_FILE \
@@ -154,8 +154,8 @@ for src_file in "$INPUT_DIR"/*.pdf; do
     if stat "$qr_code" &> /dev/null; then true; else
         # Generate qr code for payment
         echo "$data" | \
-            ./tst-qr/venv/bin/python \
-            tst-qr/create_qrcode.py \
+            ./tst-qr/venv/bin/python -m \
+            tst-qr.create_qrcode \
             --tax-data - \
             --tax-person $PERSONAL_INFOS_FILE \
             "$qr_code"

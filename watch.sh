@@ -4,8 +4,8 @@ cd "$SCRIPT_DIR/tr-report-watch"; make install; cd -
 CREDENTIALS_FILE="data/credentials.json"
 GOOGLE_DRIVE_FOLDER="trade_republic"
 
-./tr-report-watch/venv/bin/python \
- "tr-report-watch/watch_report.py" \
+./tr-report-watch/venv/bin/python -m \
+ "tr-report-watch.watch_report" \
  --app-credentials $CREDENTIALS_FILE \
  --tr-drive-folder $GOOGLE_DRIVE_FOLDER \
  --callback-url "https://probable-ultimately-heron.ngrok-free.app"

@@ -6,7 +6,16 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import google.auth.exceptions
 
-def load_token(token_file: pathlib.Path, scopes: list[str]) -> google.oauth2.credentials.Credentials:
+# If modifying these scopes, delete the file token.json.
+SCOPES = [
+    # used by tr-report-loader and tr-report-watch
+    "https://www.googleapis.com/auth/drive",
+    # used by tst-sender
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.compose",
+]
+
+def load_token(token_file: pathlib.Path) -> google.oauth2.credentials.Credentials:
     """
     Load the token from the given file, if it expired, refresh it.
     Always write the token back to the file (even if it is not refreshed).
@@ -16,7 +25,7 @@ def load_token(token_file: pathlib.Path, scopes: list[str]) -> google.oauth2.cre
     """
     creds = google.oauth2.credentials.Credentials.from_authorized_user_file(
         str(token_file),
-        scopes,
+        SCOPES,
     )
 
     if creds.expired and creds.refresh_token:
@@ -34,7 +43,7 @@ def load_token(token_file: pathlib.Path, scopes: list[str]) -> google.oauth2.cre
     return creds
 
 def load_credentials(
-    credentials: pathlib.Path, scopes: list[str]
+    credentials: pathlib.Path
 ) -> google.oauth2.credentials.Credentials:
     """
     Load google credentials for the app.  This will require manual authorization from the
@@ -45,14 +54,14 @@ def load_credentials(
     token_file = credentials.parent / "token.json"
     if token_file.exists():
         try:
-            return load_token(token_file, scopes)
+            return load_token(token_file)
         except (RuntimeError, google.auth.exceptions.GoogleAuthError):
             token_file.unlink(missing_ok=True)
 
     # Token file doesn't exist, or isn't valid anymore.
     # This is the original authorization, we need to ask the user to authenticate to its account
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-        str(credentials), scopes
+        str(credentials), SCOPES
     )
     creds = flow.run_local_server(port=0)
     token_file.write_text(creds.to_json())

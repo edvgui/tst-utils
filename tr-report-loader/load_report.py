@@ -1,18 +1,12 @@
 import pathlib
 import click
-import re
 import io
-import os
 import shutil
 
-import google.auth.transport.requests
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
-import google.auth.exceptions
 import googleapiclient.discovery
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
-from google_api import load_credentials
+from helpers.google_api import load_credentials, get_tr_reports
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = [
@@ -39,36 +33,6 @@ def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> 
     file.seek(0)
     with open(output_folder / file_metadata["name"], "wb") as f:
         shutil.copyfileobj(file, f, length=131072)
-
-
-def get_tr_reports(service, folder_name: str) -> list[dict]:
-    """
-    Get the Trade republic reports that are in a specific folder using google drive service object.
-
-    The return type is a list of files metadata as dicts of the format {"id": <str>, "name": <str>}
-    """
-
-    folder_dict = (
-        service.files()
-        .list(
-            q=f"mimeType = 'application/vnd.google-apps.folder' and name = '{folder_name}'",
-            fields="files(id, name)",
-        )
-        .execute()
-    )
-    folderResult = folder_dict.get("files", [])
-    if len(folderResult) == 0:
-        return []
-    folder_id = folderResult[0].get("id")
-
-    results = (
-        service.files().list(q=f"'{folder_id}' in parents", fields="files(id, name)").execute()
-    )
-    files = results.get("files", [])
-
-    pattern = re.compile(r"pb[0-9]+[.]pdf$")
-    return [file for file in files if pattern.match(file["name"])]
-
 
 @click.command()
 @click.option(

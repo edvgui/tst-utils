@@ -16,7 +16,7 @@ from flask import Flask, request, make_response
 
 import googleapiclient.discovery
 from googleapiclient.errors import HttpError
-from google_api import load_credentials, get_tr_reports
+from helpers.google_api import load_credentials, get_tr_reports
 
 """
 TODO 1) find a way to handle global scopes for google services (token gets overwritten with different scopes everytime)
@@ -35,11 +35,6 @@ class DriveWatcher:
     callback_url: str
     channel: Optional[dict] = None
     event: Event = False # Event triggered upon shutdown
-
-# If modifying these scopes, delete the file token.json.
-SCOPES = [
-    "https://www.googleapis.com/auth/drive",
-]
 
 app: Flask = Flask(__name__)
 
@@ -199,7 +194,7 @@ def main(
 
     """
 
-    creds = load_credentials(pathlib.Path(app_credentials), SCOPES)
+    creds = load_credentials(pathlib.Path(app_credentials))
 
     # Call the Google Drive API
     service = googleapiclient.discovery.build("drive", "v3", credentials=creds)
