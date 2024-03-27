@@ -20,7 +20,9 @@ MONTHS = {
 }
 
 time = re.compile(f"(?P<month>{'|'.join(MONTHS)}) " + r"(?P<year>20[\d]{2})")
-transaction_type = re.compile(r"TAX ON STOCK-EXCHANGE TRANSACTIONS FOR (?P<type>[A-Z]+) \((?P<tax>[\d\.]+)\%\)")
+transaction_type = re.compile(
+    r"TAX ON STOCK-EXCHANGE TRANSACTIONS FOR (?P<type>[A-Z]+) \((?P<tax>[\d\.]+)\%\)"
+)
 total_tax_basis = re.compile(r"TOTAL TAX BASIS IN EUR: (?P<amount>[\d\.]+)")
 total_tax_amount = re.compile(r"TOTAL TAX AMOUNT IN EUR: (?P<amount>[\d\.]+)")
 total_transactions = re.compile(r"TOTAL TRANSACTIONS: (?P<amount>[\d\.]+)")
@@ -75,13 +77,15 @@ def parse_doc(file: str) -> list[dict]:
         total_transactions.finditer(content),
         strict=True,
     ):
-        parsed["products"].append({
-            "stockType": section_match.group("type"),
-            "stockTax": float(section_match.group("tax")),
-            "taxBasis": float(tax_basis_match.group("amount")),
-            "taxAmount": float(tax_amount_match.group("amount")),
-            "transactionCount": int(transactions_match.group("amount")),
-        })
+        parsed["products"].append(
+            {
+                "stockType": section_match.group("type"),
+                "stockTax": float(section_match.group("tax")),
+                "taxBasis": float(tax_basis_match.group("amount")),
+                "taxAmount": float(tax_amount_match.group("amount")),
+                "transactionCount": int(transactions_match.group("amount")),
+            }
+        )
 
     return parsed
 
@@ -93,7 +97,7 @@ def parse_doc(file: str) -> list[dict]:
 )
 def main(tst_report: click.Path) -> None:
     """Extract relevant information from a trade republic tst report document
-    
+
     Arguments:
 
         TST_REPORT: Path to a tax report document that should be parsed.
