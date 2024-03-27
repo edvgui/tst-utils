@@ -15,14 +15,17 @@ cf. https://developers.google.com/drive/api/quickstart/python
 
 **Run tool**:  
 ```console
-$ tr-report-loader/venv/bin/python tr-report-loader/load_report.py --help
-Usage: load_report.py [OPTIONS]
+$ tr-report-loader/venv/bin/python -m tr-report-loader.load_report --help
+Usage: python -m tr-report-loader.load_report [OPTIONS]
 
   Retrieve input file from google drive.
 
   Arguments:
 
-      TR_PATH: Path to the Trade Republic report in google drive.
+      TR_DRIVE_FOLDER : Path to the Trade Republic report in google drive.
+      TR_OUTPUT_PATH: Path to the folder where the trade republic report
+      should be downloaded.     TR_DELETE: Boolean indicating if the report
+      should be deleted in google drive after download.
 
 Options:
   --app-credentials FILE       Path to the credentials file that can be used

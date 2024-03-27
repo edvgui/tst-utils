@@ -13,7 +13,11 @@ SCOPES = [
     # used by tst-sender
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.compose",
+    "https://www.googleapis.com/auth/gmail.send",
+    "https://www.googleapis.com/auth/photoslibrary.readonly",
+    "https://www.googleapis.com/auth/photoslibrary.appendonly",
 ]
+
 
 def load_token(token_file: pathlib.Path) -> google.oauth2.credentials.Credentials:
     """
@@ -42,8 +46,9 @@ def load_token(token_file: pathlib.Path) -> google.oauth2.credentials.Credential
 
     return creds
 
+
 def load_credentials(
-    credentials: pathlib.Path
+    credentials: pathlib.Path,
 ) -> google.oauth2.credentials.Credentials:
     """
     Load google credentials for the app.  This will require manual authorization from the
@@ -68,6 +73,7 @@ def load_credentials(
 
     return load_token(token_file)
 
+
 def get_tr_reports(service, folder_name: str) -> list[dict]:
     """
     Get the Trade republic reports that are in a specific folder using google drive service object.
@@ -89,7 +95,9 @@ def get_tr_reports(service, folder_name: str) -> list[dict]:
     folder_id = folderResult[0].get("id")
 
     results = (
-        service.files().list(q=f"'{folder_id}' in parents", fields="files(id, name)").execute()
+        service.files()
+        .list(q=f"'{folder_id}' in parents", fields="files(id, name)")
+        .execute()
     )
     files = results.get("files", [])
 

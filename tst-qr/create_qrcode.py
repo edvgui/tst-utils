@@ -32,7 +32,8 @@ def prepare_qr_code(
     """
     nrn = "".join(c for c in national_register_number if c in "0123456789")
     return qrcode.make(
-        GIRO_TEMPLATE % dict(
+        GIRO_TEMPLATE
+        % dict(
             bic="PCHQBEBB",
             name="Centre de perception - section taxes diverses",
             iban="BE39679200229319",
@@ -46,13 +47,17 @@ def prepare_qr_code(
 @click.option(
     "--tax-data",
     help="Path to a file containing the data on the actual tax to pay to the state",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True, allow_dash=True),
+    type=click.Path(
+        exists=True, file_okay=True, dir_okay=False, resolve_path=True, allow_dash=True
+    ),
     required=True,
 )
 @click.option(
     "--tax-person",
     help="Path to a file containing the data on the person filling in the form",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False, resolve_path=True, allow_dash=True),
+    type=click.Path(
+        exists=True, file_okay=True, dir_okay=False, resolve_path=True, allow_dash=True
+    ),
     required=True,
 )
 @click.argument(
@@ -75,7 +80,7 @@ def main(
     # Load the tax data and tax person
     with click.open_file(tax_data) as fd:
         data = json.load(fd)
-    
+
     with click.open_file(tax_person) as fd:
         person = json.load(fd)
 

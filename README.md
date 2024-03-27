@@ -12,6 +12,8 @@ The requirements are:
 ```
 - python>=3.10
 - podman 
+- make
+- pip
 ```
 Some tweaking with the gmail api is also necessary, see [tst-sender-readme](./tst-sender/README.md).
 
@@ -54,7 +56,7 @@ h     Display this help and exit.
 s     Set the signature image file path, default value is 'data/signature.jpg'.
 p     Set the personal informations json file path, default value is 'data/citizen.json'.
 c     Set the Gmail credentials json file path, default value is 'data/credentials.json'.
-d     Set the Google drive folder to retrieve the pdf(s) from, default value is 'trade_republic'.
+d     Set the Google drive folder to retrieve the pdf(s) from.
       This will download all the pdfs in the provided input_folder argument.
 arguments:
 input_folder     Set the input folder for the pdf(s), this argument is mandatory.
@@ -85,6 +87,12 @@ See [tst-qr](./tst-qr/).
 
 ### Send TST form
 
-This one is written in python, using gmail api to prepare a draft email, that can be sent to the belgian administration.  The tst form filled is attached to the email.
+This one is written in python, using gmail api to prepare a draft email, that can be sent to the belgian administration.  The tst form filled is attached to the email. You can also decide to send the qr code by email or to your google photo library.
 
 See [tst-sender](./tst-sender/).
+
+## Watching trade republic drive folder
+
+This component allows you to watch a google drive folder and wait to get notified by google when your trade republic report(s) get uploaded in the drive folder you are watching. It then automatically process all the reports using the `sync.sh` script. This component, unlike the others, runs continously so it is recommended to execute it on a server. It uses flask to be reachabled by google, which means you also need to ensure the application is reachable via reliable means (port forwarding, tunneling, ...). For more details, please refer to the readme of the component.
+
+See [tr-report-watch](./tr-report-watch/)

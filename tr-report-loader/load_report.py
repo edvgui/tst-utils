@@ -8,10 +8,6 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
 from helpers.google_api import load_credentials, get_tr_reports
 
-# If modifying these scopes, delete the file token.json.
-SCOPES = [
-    "https://www.googleapis.com/auth/drive",
-]
 
 def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> None:
     """
@@ -33,6 +29,7 @@ def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> 
     file.seek(0)
     with open(output_folder / file_metadata["name"], "wb") as f:
         shutil.copyfileobj(file, f, length=131072)
+
 
 @click.command()
 @click.option(
@@ -77,7 +74,7 @@ def main(
 
     """
 
-    creds = load_credentials(pathlib.Path(app_credentials), SCOPES)
+    creds = load_credentials(pathlib.Path(app_credentials))
 
     # Call the Google Drive API
     service = googleapiclient.discovery.build("drive", "v3", credentials=creds)
