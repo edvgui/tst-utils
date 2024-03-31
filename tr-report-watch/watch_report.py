@@ -9,7 +9,7 @@ import queue
 from dataclasses import dataclass
 from typing import Optional
 from time import strftime, localtime
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.parse import urljoin
 from threading import Thread, Event
 from flask import Flask, request, make_response
@@ -134,7 +134,7 @@ def start_watching_folder(service, drive_watcher: DriveWatcher) -> dict:
 
     # max expiration time for google drive file channel is 1 day
     date_now: datetime = datetime.now()
-    new_date: datetime = date_now.replace(day=date_now.day + 1)
+    new_date: datetime = date_now + timedelta(days=1)
     channel = (
         service.files()
         .watch(

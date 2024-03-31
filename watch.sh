@@ -68,7 +68,7 @@ while getopts ":hs:p:c:d:e:q:" option; do
    esac
 done
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE:-$0}" )" &> /dev/null && pwd )
 cd "$SCRIPT_DIR/tr-report-watch"; make install; cd -
 
 ./tr-report-watch/venv/bin/python -m \

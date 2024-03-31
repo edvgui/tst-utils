@@ -113,7 +113,7 @@ if [[ $CLEANUP == true ]] && [ -z $EXPORT_QR ]; then
 fi
 
 # Resolve the dir where this file belongs
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE:-$0}" )" &> /dev/null && pwd )
 
 # Initial setup, make sure that everything is installed
 cd "$SCRIPT_DIR/tr-report-loader"; make install; cd -
