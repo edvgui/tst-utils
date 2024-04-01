@@ -132,11 +132,20 @@ def start_watching_folder(service) -> dict:
     )
     folderResult = folder_dict.get("files", [])
     if len(folderResult) == 0:
-        raise RuntimeError(
-            f"The folder with name {drive_watcher.folder_name} does not exist on your google drive !"
+        folder = (
+            service.files()
+            .create(
+                body={
+                    "name": drive_watcher.folder_name,
+                    "mimeType": "application/vnd.google-apps.folder",
+                },
+                fields="id",
+            )
+            .execute()
         )
-
-    folder_id = folderResult[0].get("id")
+        folder_id = folder.get("id")
+    else:
+        folder_id = folderResult[0].get("id")
 
     # max expiration time for google drive file channel is 1 day
     date_now: datetime = datetime.now()
