@@ -267,6 +267,10 @@ def main(
 
     """
 
+    # Create input directory if it does not already exist
+    input_dir = pathlib.Path("input/")
+    input_dir.mkdir(exist_ok=True)
+
     creds = load_credentials(pathlib.Path(app_credentials))
 
     # Call the Google Drive API
