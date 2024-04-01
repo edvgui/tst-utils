@@ -34,6 +34,7 @@ The complete list is the following:
 - Signature file as png or jpg, in order to sign the TST file.
 
 - The credentials json file used to access your gmail account, more information available [here](./tst-sender/README.md).
+  Please make sure to add http://localhost:8080 in your allowed redirect urls of your google identifier.
 
 ## Quick start
 

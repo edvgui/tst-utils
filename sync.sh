@@ -181,7 +181,7 @@ for src_file in "$INPUT_DIR"/*.pdf; do
         mv data/$(basename -- "$src_file") "$dst_file"
 
         qr_code_param=()
-        if [[ $CLEANUP == true ]]; then
+        if [[ -n $EXPORT_QR ]]; then
             # if input and output folders cleanup flag is set
             qr_code_param=(--tst-qr $qr_code --qr-export $EXPORT_QR)
         fi

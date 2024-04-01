@@ -68,7 +68,7 @@ def load_credentials(
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
         str(credentials), SCOPES
     )
-    creds = flow.run_local_server(port=0)
+    creds = flow.run_local_server(port=8080)
     token_file.write_text(creds.to_json())
 
     return load_token(token_file)
