@@ -191,13 +191,13 @@ def renew_google_watch(service):
     """
 
     while not drive_watcher.event.is_set():
-        drive_watcher.channel = start_watching_folder(service, drive_watcher)
+        drive_watcher.channel = start_watching_folder(service)
 
         # Wait 1 day or until stop event is triggered
         drive_watcher.event.wait(24 * 3600)
 
         # stop the channel to avoid having overlapping channels
-        stop_watching_folder(service, drive_watcher)
+        stop_watching_folder(service)
 
 
 @click.command()
