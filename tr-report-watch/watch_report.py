@@ -21,11 +21,13 @@ from helpers.google_api import load_credentials, get_tr_reports
 
 @dataclass
 class DriveWatcher:
-    folder_name: str
-    callback_url: str
+    folder_name: Optional[str] = None
+    callback_url: Optional[str] = None
     channel: Optional[dict] = None
     event: Event = False  # Event triggered upon shutdown
 
+
+drive_watcher = DriveWatcher(event=Event())
 
 app: Flask = Flask(__name__)
 
@@ -34,7 +36,6 @@ tasks_queue = queue.SimpleQueue()
 
 def handle_tasks(
     service,
-    drive_watcher: DriveWatcher,
     tax_person: str,
     tax_signature: str,
     credentials_file: str,
@@ -103,15 +104,20 @@ def google_drive_webhook_callback():
         print("Drive sync")
         return make_response("sync", 200)
 
-    if resourceState == "update" and resourceChange == "children":
+    if (
+        resourceState == "update"
+        and resourceChange == "children"
+        and channel_id == drive_watcher.channel["id"]
+    ):
         # Only trigger tst_utils script if a new file is added in folder
+        # And if the notification channel id matches with ours
         tasks_queue.put(resource_id)
 
     print("Drive webhook handled")
     return make_response("Webhook received", 200)
 
 
-def start_watching_folder(service, drive_watcher: DriveWatcher) -> dict:
+def start_watching_folder(service) -> dict:
     """
     Start watching for changes in a specific folder, here we are looking for files creation.
     Return a dict containing information about the watch channel of the folder.
@@ -159,7 +165,7 @@ def start_watching_folder(service, drive_watcher: DriveWatcher) -> dict:
     return channel
 
 
-def stop_watching_folder(service, drive_watcher: DriveWatcher):
+def stop_watching_folder(service):
     """
     Stop watching for changes, this function uses as input the channel dict returned during creation of the watch channel.
     """
@@ -175,7 +181,7 @@ def stop_watching_folder(service, drive_watcher: DriveWatcher):
             raise e
 
 
-def renew_google_watch(service, drive_watcher: DriveWatcher):
+def renew_google_watch(service):
     """
     From Google documentation : Currently there is no automatic way to renew a notification channel.
         When a channel is close to its expiration, you must create a new one by calling the watch method
@@ -276,13 +282,12 @@ def main(
     # Call the Google Drive API
     service = googleapiclient.discovery.build("drive", "v3", credentials=creds)
 
-    drive_watcher = DriveWatcher(
-        folder_name=tr_drive_folder, callback_url=callback_url, event=Event()
-    )
+    drive_watcher.folder_name = tr_drive_folder
+    drive_watcher.callback_url = callback_url
 
     # Create thread that will start watching google drive and automatically renew the watch channel
     renew_google_watch_thread = Thread(
-        target=renew_google_watch, args=(service, drive_watcher), daemon=True
+        target=renew_google_watch, args=(service,), daemon=True
     )
     renew_google_watch_thread.daemon = True
     renew_google_watch_thread.start()
@@ -303,7 +308,6 @@ def main(
         target=handle_tasks,
         args=(
             service,
-            drive_watcher,
             tax_person,
             tax_signature,
             app_credentials,
@@ -317,7 +321,7 @@ def main(
         print("Cleaning, please wait ...")
 
         if drive_watcher.channel:
-            stop_watching_folder(service, drive_watcher)
+            stop_watching_folder(service)
 
         sys.exit(0)
 
