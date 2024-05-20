@@ -58,22 +58,3 @@ Options:
 
 A recommended way to run this component is to host it on a server that you have to make reachable.
 In order to do so, either setup yourself the port forwarding or use a tunneling service. 
-
-An easy way is to use [ngrok](https://dashboard.ngrok.com/get-started/setup/linux), create an account and a domain name. 
-Then just set up a ngrok tunnel with a container using their image, see https://ngrok.com/docs/using-ngrok-with/docker/.
-```
-sudo docker run --net=host -it -d -e NGROK_AUTHTOKEN=YOUR_NGROK_TOKEN ngrok/ngrok:latest http --domain=YOUR_FREE_NGROK_DOMAIN 8000
-```
-
-However this means your application is still running directly on the server, you could go a bit further and run it also in another container.
-A dockerfile is provided in the main folder of the repo for this exact purpose, all you need to do is to edit the parameters of the entrypoint command with your information. The setup is pretty simple :
-
-- Build the tst image : `docker build . -t IMAGE_NAME`
-
-- Create a docker network : `docker network create NETWORK_NAME`
-
-- Create the tst container: `docker run --net=NETWORK_NAME --privileged -t -d IMAGE_NAME`
-
-- Create the ngrok container: `docker run --net=NETWORK_NAME -it -d -e NGROK_AUTHTOKEN=YOUR_NGROK_TOKEN ngrok/ngrok:latest http --domain=YOUR_FREE_NGROK_DOMAIN CONTAINER_NAME:8000`
-
-Now, if you provided your ngrok domain as callback url, all the google notifications will be redirected directly to your container tst application.
