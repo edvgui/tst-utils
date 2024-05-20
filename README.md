@@ -94,6 +94,14 @@ See [tst-sender](./tst-sender/).
 
 ## Watching trade republic drive folder
 
-This component allows you to watch a google drive folder and wait to get notified by google when your trade republic report(s) get uploaded in the drive folder you are watching. It then automatically process all the reports using the `sync.sh` script. This component, unlike the others, runs continously so it is recommended to execute it on a server. It uses flask to be reachabled by google, which means you also need to ensure the application is reachable via reliable means (port forwarding, tunneling, ...). For more details, please refer to the readme of the component.
+This component allows you to watch a google drive folder and wait to get notified by google when your trade republic report(s) get uploaded in the drive folder you are watching. It then automatically process all the reports using the `sync.sh` script. This component, unlike the others, runs continously so it is recommended to execute it on a server. It uses flask to be reachabled by google, which means you also need to ensure the application is reachable via reliable means (port forwarding, tunneling, ...).
 
-See [tr-report-watch](./tr-report-watch/)
+### Run the watch component
+
+```
+cd tr-report-watch
+make install
+venv/bin/python -m "tr-report-watch.watch_report"
+```
+
+For more details about the argument, please refer to [tr-report-watch README](./tr-report-watch/README.md).
