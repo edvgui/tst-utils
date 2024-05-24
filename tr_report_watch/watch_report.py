@@ -191,7 +191,10 @@ def renew_google_watch(service):
         stop_watching_folder(service)
 
 
-@click.command()
+@click.command(
+    name="tst-watch",
+    help="Watch for trade republics reports in a specific google drive folder and process them as they are uploaded.",
+)
 @click.option(
     "--app-credentials",
     help="Path to the credentials file that can be used to interact with google drive api.",

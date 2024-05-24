@@ -5,7 +5,6 @@ install: venv
 	venv/bin/pip install -U --upgrade-strategy=eager \
 		-r tr_report_loader/requirements.txt \
 		-r tr_report_parser/requirements.txt \
-		-r tr_report_watch/requirements.txt \
 		-r tst_qr/requirements.txt \
 		-r tst_sender/requirements.txt \
 		-r tst_filler/requirements.txt \

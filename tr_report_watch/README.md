@@ -15,43 +15,26 @@ cf. https://developers.google.com/drive/api/quickstart/python
 
 **Run tool**:  
 ```console
-$ tr-report-watch/venv/bin/python -m tr-report-watch.watch_report --help
-Usage: python -m tr-report-watch.watch_report [OPTIONS]
+$ tr_report_watch/venv/bin/python -m tr_report_watch.watch_report --help
+Usage: python -m tr_report_watch.watch_report [OPTIONS]
 
-  Watch for trade republics reports in a specific google drive folder and process them as they are uploaded.
-
-  Arguments:
-
-      TR_DRIVE_FOLDER : Folder containing trade republic report(s) in google
-      drive.
-
-      CALLBACK_URL :  Url used to reach the flask application, this will be
-      used by google to send notification upon changes in google drive folder.
-
-      APP_CREDENTIALS : Path to the credentials file that can be used to
-      interact with google drive api.
-
-      TAX_PERSON : Path to a file containing the data on the person filling in
-      the form.
-
-      TAX_SIGNATURE : Path to a file image containing the signature.
-
-      QR_EXPORT : Way to export the QR code, either gmail or google photo.
+  Watch for trade republics reports in a specific google drive folder and
+  process them as they are uploaded.
 
 Options:
-  --app-credentials FILE       Path to the credentials file that can be used
-                               to interact with google drive api.  [required]
-  --tax-person FILE            Path to a file containing the data on the
-                               person filling in the form.  [required]
-  --tax-signature FILE         Path to a file image containing the signature.
-                               [required]
-  --qr-export [mail|photo]     Way to export the QR code, either gmail or
-                               google photo.
-  --tr-drive-folder DIRECTORY  Folder containing trade republic report(s) in
-                               google drive.  [required]
-  --callback-url TEXT          Url used by google to send notifications to
-                               upon changes in folder.  [required]
-  --help                       Show this message and exit.
+  --app-credentials FILE    Path to the credentials file that can be used to
+                            interact with google drive api.  [required]
+  --tax-person FILE         Path to a file containing the data on the person
+                            filling in the form.  [required]
+  --tax-signature FILE      Path to a file image containing the signature.
+                            [required]
+  --qr-export [mail|photo]  Way to export the QR code, either gmail or google
+                            photo.
+  --tr-drive-folder TEXT    Folder containing trade republic report(s) in
+                            google drive.  [required]
+  --callback-url TEXT       Url used by google to send notifications to upon
+                            changes in folder.  [required]
+  --help                    Show this message and exit.
 ```
 
 **Application setup**:
