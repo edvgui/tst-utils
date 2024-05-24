@@ -2,7 +2,7 @@ import pypdf
 import re
 import json
 import click
-
+from helpers.utils import TaxData, TaxProduct
 
 MONTHS = {
     "JANUARY": 1,
@@ -28,7 +28,7 @@ total_tax_amount = re.compile(r"TOTAL TAX AMOUNT IN EUR: (?P<amount>[\d\.]+)")
 total_transactions = re.compile(r"TOTAL TRANSACTIONS: (?P<amount>[\d\.]+)")
 
 
-def parse_doc(file: str) -> list[dict]:
+def parse_doc(file: str) -> TaxData:
     """
     Parse a trade republic tax report for belgian citizen and extract a report
     of the fiven form:
@@ -59,16 +59,15 @@ def parse_doc(file: str) -> list[dict]:
     """
     reader = pypdf.PdfReader(file)
     content = "\n".join(page.extract_text() for page in reader.pages)
-
     time_match = time.search(content)
     month = time_match.group("month")
     year = int(time_match.group("year"))
 
-    parsed = {
-        "month": MONTHS[month],
-        "year": year,
-        "products": [],
-    }
+    parsed = TaxData(
+        month=MONTHS[month],
+        year=year,
+        products=[],
+    )
 
     for section_match, tax_basis_match, tax_amount_match, transactions_match in zip(
         transaction_type.finditer(content),
@@ -77,14 +76,14 @@ def parse_doc(file: str) -> list[dict]:
         total_transactions.finditer(content),
         strict=True,
     ):
-        parsed["products"].append(
-            {
-                "stockType": section_match.group("type"),
-                "stockTax": float(section_match.group("tax")),
-                "taxBasis": float(tax_basis_match.group("amount")),
-                "taxAmount": float(tax_amount_match.group("amount")),
-                "transactionCount": int(transactions_match.group("amount")),
-            }
+        parsed.products.append(
+            TaxProduct(
+                stockType=section_match.group("type"),
+                stockTax=float(section_match.group("tax")),
+                taxBasis=float(tax_basis_match.group("amount")),
+                taxAmount=float(tax_amount_match.group("amount")),
+                transactionCount=int(transactions_match.group("amount")),
+            )
         )
 
     return parsed

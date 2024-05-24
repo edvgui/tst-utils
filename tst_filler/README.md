@@ -1,7 +1,8 @@
 # Fill in TST form
 
 **Prerequisites**:
-1. Have podman installed on your system (no need for nodejs)
+1. Have python>=3.10 installed on your system
+2. A project on the google console, with access to the google drive api: https://console.cloud.google.com/workspace-api
 
 **Install dependencies**:  
 ```bash
@@ -10,7 +11,7 @@ make install
 
 **Run tool**:  
 ```console
-$ ./run --help
+$ venv/bin/python fill_tob.py --help
 Usage: fillTob [options] <output-file>
 
 Fill in the TST form for a given citizen and tax data

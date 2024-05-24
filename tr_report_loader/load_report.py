@@ -31,6 +31,27 @@ def download_file(service, file_metadata: dict, output_folder: pathlib.Path) -> 
         shutil.copyfileobj(file, f, length=131072)
 
 
+def load_report(
+    app_credentials: str,
+    tr_drive_folder: str,
+    tr_output_path: str,
+    tr_delete: bool,
+) -> None:
+    creds = load_credentials(pathlib.Path(app_credentials))
+
+    # Call the Google Drive API
+    service = googleapiclient.discovery.build("drive", "v3", credentials=creds)
+    tr_reports = get_tr_reports(service, folder_name=tr_drive_folder)
+
+    for report in tr_reports:
+        download_file(
+            service, file_metadata=report, output_folder=pathlib.Path(tr_output_path)
+        )
+        if tr_delete:
+            # Caution, this will permanently delete the file without moving it to trash
+            service.files().delete(fileId=report["id"]).execute()
+
+
 @click.command()
 @click.option(
     "--app-credentials",
@@ -74,19 +95,7 @@ def main(
 
     """
 
-    creds = load_credentials(pathlib.Path(app_credentials))
-
-    # Call the Google Drive API
-    service = googleapiclient.discovery.build("drive", "v3", credentials=creds)
-    tr_reports = get_tr_reports(service, folder_name=tr_drive_folder)
-
-    for report in tr_reports:
-        download_file(
-            service, file_metadata=report, output_folder=pathlib.Path(tr_output_path)
-        )
-        if tr_delete:
-            # Caution, this will permanently delete the file without moving it to trash
-            service.files().delete(fileId=report["id"]).execute()
+    load_report(app_credentials, tr_drive_folder, tr_output_path, tr_delete)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ import sys
 import signal
 import subprocess
 import queue
+from main import process_tst
 from dataclasses import dataclass
 from typing import Optional
 from time import strftime, localtime
@@ -52,34 +53,15 @@ def handle_tasks(
             files = get_tr_reports(service, drive_watcher.folder_name)
             if len(files) > 0:
                 # Only run the script if there are remaining pdf report(s) to process
-                file_path = pathlib.Path(__file__)
-                with open(file_path.parent / "output.txt", "w+") as fd:
-                    try:
-                        result = subprocess.run(
-                            [
-                                "sh",
-                                "sync.sh",
-                                "-s",
-                                tax_signature,
-                                "-p",
-                                tax_person,
-                                "-c",
-                                credentials_file,
-                                "-d",
-                                drive_watcher.folder_name,
-                                "-r",
-                                "-q",
-                                qr_export,
-                                "input",
-                            ],
-                            cwd=str(file_path.parent.parent),
-                            check=True,
-                            stdout=fd,
-                            stderr=fd,
-                            text=True,
-                        )
-                    except subprocess.CalledProcessError as e:
-                        print(str(e))
+                process_tst(
+                    input_folder="input",
+                    tax_signature=tax_signature,
+                    tax_person=tax_person,
+                    app_credentials=credentials_file,
+                    tr_drive_folder=drive_watcher.folder_name,
+                    tr_delete=True,
+                    qr_export=qr_export,
+                )
 
 
 @app.route("/drive_webhook", methods=["POST"])
@@ -245,8 +227,8 @@ def renew_google_watch(service):
 @click.option(
     "--tr-drive-folder",
     help="Folder containing trade republic report(s) in google drive.",
-    default=pathlib.Path("trade_republic"),
-    type=click.Path(exists=False, file_okay=False, dir_okay=True),
+    default="trade_republic",
+    type=click.STRING,
     required=True,
 )
 @click.option(
@@ -256,7 +238,7 @@ def renew_google_watch(service):
     required=True,
 )
 def main(
-    tr_drive_folder: click.Path,
+    tr_drive_folder: str,
     callback_url: str,
     app_credentials: Optional[click.Path] = "data/credentials.json",
     tax_person: Optional[click.Path] = "data/citizen.json",

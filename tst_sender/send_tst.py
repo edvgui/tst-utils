@@ -1,8 +1,9 @@
 import base64
-import json
 import pathlib
 import click
 import typing
+from tr_report_parser import extract_report
+from helpers.utils import TaxData, TaxPerson
 
 import email.message
 import googleapiclient.discovery
@@ -147,6 +148,46 @@ def upload_qr_to_google_photo(
     ).execute()
 
 
+def send_tst(
+    app_credentials: str,
+    tax_data: TaxData,
+    tax_person: TaxPerson,
+    tst_form: str,
+    tst_qr: typing.Optional[click.Path] = None,
+    qr_export: typing.Optional[click.Choice] = None,
+) -> None:
+    creds = load_credentials(pathlib.Path(app_credentials))
+
+    # Call the Gmail API
+    service = googleapiclient.discovery.build("gmail", "v1", credentials=creds)
+
+    # Discover the email address of the authenticated user
+    sender = service.users().getProfile(userId="me").execute()["emailAddress"]
+
+    encoded_message = prepare_mail(
+        sender=sender,
+        month=tax_data.month,
+        year=tax_data.year,
+        full_name=tax_person.fullName,
+        national_register_number=tax_person.nationalRegisterNumber,
+        tst_form=pathlib.Path(tst_form),
+    )
+
+    create_message = {"message": {"raw": encoded_message}}
+    service.users().drafts().create(userId="me", body=create_message).execute()
+
+    if not tst_qr:
+        return
+
+    match qr_export:
+        case "mail":
+            send_qr_by_mail(service, tst_qr=tst_qr, mail=sender)
+        case "photo":
+            upload_qr_to_google_photo(tst_qr, creds)
+        case _:
+            pass  # None or any other value
+
+
 @click.command()
 @click.option(
     "--app-credentials",
@@ -191,8 +232,8 @@ def upload_qr_to_google_photo(
 )
 def main(
     app_credentials: click.Path,
-    tax_data: click.Path,
     tax_person: click.Path,
+    tst_report: click.Path,
     tst_form: click.Path,
     tst_qr: typing.Optional[click.Path] = None,
     qr_export: typing.Optional[click.Choice] = "mail",
@@ -203,6 +244,8 @@ def main(
 
         TST_FORM: Path to the filled in tax report to send to the administration.
 
+        TST_REPORT: Path to trade republic report.
+
         TAX_DATA: Path to a file containing the data on the actual tax to pay to the state.
 
         TAX_PERSON: Path to a file containing the data on the person filling in the form.
@@ -211,41 +254,11 @@ def main(
 
         QR_EXPORT: Way to export the QR code, either gmail or google photo.
     """
-    creds = load_credentials(pathlib.Path(app_credentials))
 
-    # Call the Gmail API
-    service = googleapiclient.discovery.build("gmail", "v1", credentials=creds)
+    data = extract_report.parse_doc(tst_report)
+    person = TaxPerson.from_file(tax_person)
 
-    # Discover the email address of the authenticated user
-    sender = service.users().getProfile(userId="me").execute()["emailAddress"]
-
-    # Load the tax data and tax person
-    with click.open_file(tax_data) as fd:
-        data = json.load(fd)
-
-    with click.open_file(tax_person) as fd:
-        person = json.load(fd)
-
-    encoded_message = prepare_mail(
-        sender=sender,
-        month=data["month"],
-        year=data["year"],
-        full_name=person["fullName"],
-        national_register_number=person["nationalRegisterNumber"],
-        tst_form=pathlib.Path(tst_form),
-    )
-
-    create_message = {"message": {"raw": encoded_message}}
-    service.users().drafts().create(userId="me", body=create_message).execute()
-
-    if not tst_qr:
-        return
-
-    match qr_export:
-        case "mail":
-            send_qr_by_mail(service, tst_qr=tst_qr, mail=sender)
-        case "photo":
-            upload_qr_to_google_photo(tst_qr, creds)
+    send_tst(app_credentials, data, person, tst_form, tst_qr, qr_export)
 
 
 if __name__ == "__main__":

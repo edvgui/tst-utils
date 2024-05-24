@@ -1,8 +1,8 @@
-import json
 import click
 import qrcode
 import qrcode.image.pil
-
+from tr_report_parser import extract_report
+from helpers.utils import TaxData, TaxPerson
 
 GIRO_TEMPLATE = """BCD
 001
@@ -43,6 +43,18 @@ def prepare_qr_code(
     )
 
 
+def create_qrcode(
+    tax_data: TaxData,
+    tax_person: TaxPerson,
+    output_file: str,
+) -> None:
+    # Load the tax data and tax person
+
+    total: float = sum(p.taxAmount for p in tax_data.products)
+    encoded_message = prepare_qr_code(total, tax_person.nationalRegisterNumber)
+    encoded_message.save(str(output_file))
+
+
 @click.command()
 @click.option(
     "--tax-data",
@@ -66,27 +78,23 @@ def prepare_qr_code(
     required=True,
 )
 def main(
-    tax_data: click.Path,
+    tst_report: click.Path,
     tax_person: click.Path,
     output_file: click.Path,
 ) -> None:
     """Create a QR Code containing all payment info for the tst.
 
     Arguments:
+        TST_REPORT: Path to trade republic report.
 
         OUTPUT_FILE: Path to the generated qr code image.
 
     """
-    # Load the tax data and tax person
-    with click.open_file(tax_data) as fd:
-        data = json.load(fd)
 
-    with click.open_file(tax_person) as fd:
-        person = json.load(fd)
+    data = extract_report.parse_doc(tst_report)
+    person = TaxPerson.from_file(tax_person)
 
-    total: float = sum(p["taxAmount"] for p in data["products"])
-    encoded_message = prepare_qr_code(total, person["nationalRegisterNumber"])
-    encoded_message.save(str(output_file))
+    create_qrcode(data, person, output_file)
 
 
 if __name__ == "__main__":
