@@ -2,7 +2,6 @@
 
 **Prerequisites**:
 1. Have python>=3.10 installed on your system
-2. A project on the google console, with access to the google drive api: https://console.cloud.google.com/workspace-api
 
 **Install dependencies**:  
 ```bash
@@ -11,19 +10,36 @@ make install
 
 **Run tool**:  
 ```console
-$ venv/bin/python fill_tob.py --help
-Usage: fillTob [options] <output-file>
+$ tst_filler/venv/bin/python -m tst_filler.fill_tob --help
+Usage: python -m tst_filler.fill_tob [OPTIONS]
 
-Fill in the TST form for a given citizen and tax data
+  Fill in the TST form for a given citizen and tax data.
 
-Arguments:
-  output-file                   The name of the filled in form file
+  Arguments:     TAX_DATA : Data containing all the tax information required
+  to fill the belgian tst pdf.
+
+      TST_REPORT: Path to trade republic report.
+
+      OUTPUT_FILE : File path where to save the resulting pdf.
+
+      TAX_PERSON : Path to a file containing the data on the person filling in
+      the form.
+
+      TAX_SIGNATURE : Path to a file image containing the signature.
+
+      SIGNATURE_LOCATION : Location (city) where the document has been signed.
+
+      FORM_FILE : Belgian tst pdf template file to fill.
 
 Options:
-  --form-file <path>            Path to the TST form file (pdf) that we should fill in. (default: "/home/guillaume/Documents/taxes/tst-filler/form-original.pdf")
-  --signature-location <value>  The geographical location where the signature of the document is taking place (default: "Bruxelles")
-  --signature-file <path>       Path to the image file that should be used as a signature.
-  --tax-person <path>           Path to a file containing the data on the person filling in the form
-  --tax-data <path>             Path to a file containing the data on the actual tax to pay to the state
-  -h, --help                    display help for command
+  --tax-data FILE       Path to a file containing the data on the actual tax
+                        to pay to the state  [required]
+  --output-file FILE    Folder containing trade republic report(s) in google
+                        drive.  [required]
+  --tax-person FILE     Path to a file containing the data on the person
+                        filling in the form.  [required]
+  --tax-signature FILE  Path to a file image containing the signature.
+                        [required]
+  --form-file FILE      Belgian tst  pdf template file to fill.  [required]
+  --help                Show this message and exit.
 ```

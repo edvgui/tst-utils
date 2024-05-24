@@ -15,8 +15,8 @@ cf. https://developers.google.com/gmail/api/quickstart/python
 
 **Run tool**:  
 ```console
-tst-sender/venv/bin/python -m tst-sender.send_tst --help
-Usage: python -m tst-sender.send_tst [OPTIONS] TST_FORM
+$ tst_sender/venv/bin/python -m tst_sender.send_tst --help
+Usage: python -m tst_sender.send_tst [OPTIONS] TST_FORM
 
   Prepare a draft email with the given tst file for the belgian finance
   administration.
@@ -25,6 +25,8 @@ Usage: python -m tst-sender.send_tst [OPTIONS] TST_FORM
 
       TST_FORM: Path to the filled in tax report to send to the
       administration.
+
+      TST_REPORT: Path to trade republic report.
 
       TAX_DATA: Path to a file containing the data on the actual tax to pay to
       the state.

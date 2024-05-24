@@ -10,7 +10,6 @@ from tst_qr import create_qrcode
 from tst_sender import send_tst
 from helpers.utils import TaxPerson
 
-# TODO update all README(S)
 
 def process_tst(
     input_folder: str,
@@ -71,7 +70,11 @@ def process_tst(
             file.unlink()
 
 
-@click.command()
+@click.command(
+    name="tst-utils",
+    help="Tool to fill in belgian TST file from trade republic monthly report. "
+    "This tool also creates a draft mail with the generated document and a qr code to pay the tax.",
+)
 @click.argument(
     "input_folder",
     type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True),

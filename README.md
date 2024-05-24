@@ -10,8 +10,7 @@ This code-base is purely opportunistic, and will rely on the simplest tools it c
 
 The requirements are: 
 ```
-- python>=3.10
-- podman 
+- python>=3.10 
 - make
 - pip
 ```
@@ -34,36 +33,40 @@ The complete list is the following:
 - Signature file as png or jpg, in order to sign the TST file.
 
 - The credentials json file used to access your gmail account, more information available [here](./tst_sender/README.md).
-  Please make sure to add http://localhost:8080 in your allowed redirect urls of your google identifier.
+  Please make sure to add http://localhost:8080 in your allowed redirect urls of your google identifier and make sure to set your google project in production and not testing (otherwise you will have to reconnect to your google account each month because the refresh token will expire).
 
 ## Quick start
 
 To run the bash script, just run:
 
 ```
-sh sync.sh
+venv/bin/python -m main 
 ```
 
 The options are defined as follow:
 
 ```
-[xxxxxx@xxxxxx tst-utils]$ sh sync.sh -h
-Tool to fill in belgian TST file from trade republic monthly report.
-This tool also creates a draft mail with the generated document and a qr code to pay the tax.
+[xxxxxx@xxxxxx tst-utils]$ venv/bin/python -m main --help
+Usage: main.py [OPTIONS] INPUT_FOLDER OUTPUT_FOLDER
 
-Syntax: sh sync.sh [-h|s|p|c] input_folder [output_folder]
-options:
-h     Display this help and exit.
-s     Set the signature image file path, default value is 'data/signature.jpg'.
-p     Set the personal informations json file path, default value is 'data/citizen.json'.
-c     Set the Gmail credentials json file path, default value is 'data/credentials.json'.
-d     Set the Google drive folder to retrieve the pdf(s) from.
-      This will download all the pdfs in the provided input_folder argument.
-arguments:
-input_folder     Set the input folder for the pdf(s), this argument is mandatory.
-output_folder    Set the output folder for the generated pdf(s) and qr code, default value is 'output'.
+  Tool to fill in belgian TST file from trade republic monthly report. This
+  tool also creates a draft mail with the generated document and a qr code to
+  pay the tax.
 
-Please make sure to provide options before arguments.
+Options:
+  --tax-signature FILE      Path to a file image containing the signature.
+                            [required]
+  --tax-person FILE         Path to a file containing the data on the person
+                            filling in the form.  [required]
+  --app-credentials FILE    Path to the credentials file that can be used to
+                            interact with google drive api.  [required]
+  --tr-drive-folder TEXT    Folder containing trade republic report(s) in
+                            google drive.
+  --tr-delete               Flag to indicate that the files in input and
+                            output folders should be cleaned.
+  --qr-export [mail|photo]  Way to export the QR code, either gmail or google
+                            photo.
+  --help                    Show this message and exit.
 ```
 
 
@@ -76,7 +79,7 @@ See [tr-report-parser](./tr_report_parser/).
 
 ### Filling in TST form
 
-This one is written in Javascript, and runs with node, inside a podman container.  The tool relies on the pdf-lib library, it is highly dependant on the form file used, and has only been tested with https://finance.belgium.be/sites/default/files/Changement%20de%20compte%20formulaire%20TST%20EN.pdf
+This is done in python and relies on the pyMupdf library, written in c and highly optimized. It is highly dependant on the form file used, and has only been tested with https://finance.belgium.be/sites/default/files/Changement%20de%20compte%20formulaire%20TST%20EN.pdf
 
 See [tst-filler](./tst_filler/).
 

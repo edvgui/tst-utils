@@ -12,11 +12,11 @@ make install
 **Run tool**:  
 ```console
 $ venv/bin/python create_qrcode.py --help
-Usage: create_qrcode.py [OPTIONS] OUTPUT_FILE
+Usage: python -m tst_qr.create_qrcode [OPTIONS] OUTPUT_FILE
 
   Create a QR Code containing all payment info for the tst.
 
-  Arguments:
+  Arguments:     TST_REPORT: Path to trade republic report.
 
       OUTPUT_FILE: Path to the generated qr code image.
 
