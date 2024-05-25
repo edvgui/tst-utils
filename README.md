@@ -102,9 +102,8 @@ This component allows you to watch a google drive folder and wait to get notifie
 ### Run the watch component
 
 ```
-cd tr-report-watch
-make install
-venv/bin/python -m "tr-report-watch.watch_report"
+make watch_install
+venv/bin/python -m tr_report_watch.watch_report
 ```
 
-For more details about the argument, please refer to [tr-report-watch README](./tr_report_watch/README.md).
+For more details about the arguments, please refer to [tr-report-watch README](./tr_report_watch/README.md).

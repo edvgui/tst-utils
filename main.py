@@ -38,7 +38,7 @@ def process_tst(
 
     if tr_drive_folder:
         load_report.load_report(
-            app_credentials, tr_drive_folder, output_folder, tr_delete
+            app_credentials, tr_drive_folder, input_folder, tr_delete
         )
 
     for src_file in input_dir.glob("*.pdf"):
@@ -119,7 +119,8 @@ def process_tst(
 )
 @click.option(
     "--tr-delete",
-    help="Flag to indicate that the files in input and output folders should be cleaned.",
+    help="Flag to indicate that the files in input and output folders should be cleaned." \
+        " If loading pdf from drive, this will also cause the pdf to be cleaned there.",
     is_flag=True,
 )
 @click.option(

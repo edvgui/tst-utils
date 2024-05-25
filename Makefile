@@ -9,3 +9,6 @@ install: venv
 		-r tst_sender/requirements.txt \
 		-r tst_filler/requirements.txt \
 		-r requirements.txt
+
+watch_install: install
+	venv/bin/pip install -r tr_report_watch/requirements.txt

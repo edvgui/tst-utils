@@ -3,9 +3,7 @@ From fedora:latest
 COPY . tst_utils
 WORKDIR tst_utils
 
-USER root
-
-RUN dnf install -y make podman pip
+RUN make watch_install
 
 # Edit/add parameters here with your own information
-ENTRYPOINT sh watch.sh -s data/signature.png -q photo -e MY_CALLBACK_URL
+ENTRYPOINT venv/bin/python -m tr_report_watch.watch_report --tax-signature data/signature.png --qr-export photo --callback-url MY_CALLBACK_URL

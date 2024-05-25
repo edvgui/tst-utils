@@ -4,7 +4,6 @@ import uuid
 import time
 import sys
 import signal
-import subprocess
 import queue
 from main import process_tst
 from dataclasses import dataclass
