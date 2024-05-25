@@ -13,9 +13,9 @@ make install
 cf. https://developers.google.com/drive/api/quickstart/python
 
 
-**Run tool**:  
+**Run tool**:
 ```console
-$ tr_report_watch/venv/bin/python -m tr_report_watch.watch_report --help
+$ venv/bin/python -m tr_report_watch.watch_report --help
 Usage: python -m tr_report_watch.watch_report [OPTIONS]
 
   Watch for trade republics reports in a specific google drive folder and

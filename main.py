@@ -119,8 +119,8 @@ def process_tst(
 )
 @click.option(
     "--tr-delete",
-    help="Flag to indicate that the files in input and output folders should be cleaned." \
-        " If loading pdf from drive, this will also cause the pdf to be cleaned there.",
+    help="Flag to indicate that the files in input and output folders should be cleaned."
+    " If loading pdf from drive, this will also cause the pdf to be cleaned there.",
     is_flag=True,
 )
 @click.option(
