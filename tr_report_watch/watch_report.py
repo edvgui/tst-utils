@@ -71,11 +71,11 @@ def google_drive_webhook_callback():
     For more information about it see https://developers.google.com/drive/api/guides/push
     """
 
-    resource_id = request.headers["X-Goog-Resource-Id"]
-    channel_id = request.headers["X-Goog-Channel-Id"]
-    resourceState = request.headers["X-Goog-Resource-State"]
+    resource_id = request.headers.get("X-Goog-Resource-Id", None)
+    channel_id = request.headers.get("X-Goog-Channel-Id", None)
+    resourceState = request.headers.get("X-Goog-Resource-State", None)
     resourceChange = request.headers.get("X-Goog-Changed", None)
-    channelExpiration = request.headers["X-Goog-Channel-Expiration"]
+    channelExpiration = request.headers.get("X-Goog-Channel-Expiration", None)
 
     if resourceState == "sync":
         # Time when the notification channel expires
