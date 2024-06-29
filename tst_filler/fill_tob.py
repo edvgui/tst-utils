@@ -1,8 +1,7 @@
 import click
 import pathlib
-import fitz
+import pymupdf
 import datetime
-import json
 import geocoder
 from helpers.utils import TaxData, TaxPerson
 from typing import Optional
@@ -22,7 +21,7 @@ def draw_tax_square_numbers(page, height: int, x: list[int], value: float) -> No
     million_value = int(value / 1000000) % 1000
     if million_value > 0:
         page.insert_text(
-            point=fitz.Point(x[0], height), text=f"{million_value}", fontsize=15
+            point=pymupdf.Point(x[0], height), text=f"{million_value}", fontsize=15
         )
 
     # digits from million to thousands
@@ -31,18 +30,18 @@ def draw_tax_square_numbers(page, height: int, x: list[int], value: float) -> No
         if million_value > 0:
             thousand_value = f"{thousand_value:03d}"
         page.insert_text(
-            point=fitz.Point(x[1], height), text=str(thousand_value), fontsize=15
+            point=pymupdf.Point(x[1], height), text=str(thousand_value), fontsize=15
         )
 
     # last 3 digit before cents
     unit_value = int(value) % 1000
     if thousand_value > 0 or million_value > 0:
         unit_value = f"{unit_value:03d}"
-    page.insert_text(point=fitz.Point(x[2], height), text=str(unit_value), fontsize=15)
+    page.insert_text(point=pymupdf.Point(x[2], height), text=str(unit_value), fontsize=15)
 
     # cents
     page.insert_text(
-        point=fitz.Point(x[3], height), text=f"{round((value%1)*100):02d}", fontsize=15
+        point=pymupdf.Point(x[3], height), text=f"{round((value%1)*100):02d}", fontsize=15
     )
 
 
@@ -66,18 +65,18 @@ def fill_tob(
     form_file: Optional[str] = "data/form-original.pdf",
 ) -> None:
     # retrieve the first page of the PDF
-    file_handle = fitz.open(form_file)
+    file_handle = pymupdf.open(form_file)
     first_page = file_handle[0]
 
     # Fill the date
     first_page.insert_text(
-        point=fitz.Point(275, 118),
+        point=pymupdf.Point(275, 118),
         text=str(tax_data.month),
         fontname="helvetica-bold",
         fontsize=10,
     )
     first_page.insert_text(
-        point=fitz.Point(288, 118),
+        point=pymupdf.Point(288, 118),
         text=str(tax_data.year % 100),
         fontname="helvetica-bold",
         fontsize=10,
@@ -85,13 +84,13 @@ def fill_tob(
 
     # Fill user personal data
     first_page.insert_text(
-        point=fitz.Point(305, 187), text=tax_person.nationalRegisterNumber, fontsize=10
+        point=pymupdf.Point(305, 187), text=tax_person.nationalRegisterNumber, fontsize=10
     )
     first_page.insert_text(
-        point=fitz.Point(305, 199), text=tax_person.fullName, fontsize=10
+        point=pymupdf.Point(305, 199), text=tax_person.fullName, fontsize=10
     )
     first_page.insert_text(
-        point=fitz.Point(305, 222), text=tax_person.address, fontsize=10
+        point=pymupdf.Point(305, 222), text=tax_person.address, fontsize=10
     )
 
     tax_products_height = {0.12: 304, 0.35: 385, 1.32: 408}
@@ -106,7 +105,7 @@ def fill_tob(
 
         # Number
         first_page.insert_text(
-            point=fitz.Point(227, height),
+            point=pymupdf.Point(227, height),
             text=str(product_data.transactionCount),
             fontsize=15,
         )
@@ -127,16 +126,16 @@ def fill_tob(
 
     # location and date of signature
     second_page.insert_text(
-        point=fitz.Point(81, 588), text=get_current_city(), fontsize=12
+        point=pymupdf.Point(81, 588), text=get_current_city(), fontsize=12
     )
     second_page.insert_text(
-        point=fitz.Point(181, 588),
+        point=pymupdf.Point(181, 588),
         text=datetime.datetime.now().strftime("%d/%m/%Y"),
         fontsize=12,
     )
 
     # add the signature
-    second_page.insert_image(rect=fitz.Rect(300, 500, 450, 650), filename=tax_signature)
+    second_page.insert_image(rect=pymupdf.Rect(300, 500, 450, 650), filename=tax_signature)
 
     file_handle.save(output_file)
 
