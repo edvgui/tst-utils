@@ -101,5 +101,5 @@ def get_tr_reports(service, folder_name: str) -> list[dict]:
     )
     files = results.get("files", [])
 
-    pattern = re.compile(r"pb[0-9]+[.]pdf$")
+    pattern = re.compile(r"^.{1,}\.pdf$")
     return [file for file in files if pattern.match(file["name"])]
