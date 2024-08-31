@@ -13,7 +13,6 @@ def get_current_city() -> str:
     myloc = geocoder.ip("me")
     geolocator = Nominatim(user_agent="tst_utils")
     location = geolocator.reverse(str(myloc.lat) + "," + str(myloc.lng))
-    breakpoint()
     return location.raw["address"]["town"].split(" - ")[0]
 
 
