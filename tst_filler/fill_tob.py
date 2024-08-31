@@ -13,7 +13,8 @@ def get_current_city() -> str:
     myloc = geocoder.ip("me")
     geolocator = Nominatim(user_agent="tst_utils")
     location = geolocator.reverse(str(myloc.lat) + "," + str(myloc.lng))
-    return location.raw["address"]["city"].split(" - ")[0]
+    breakpoint()
+    return location.raw["address"]["town"].split(" - ")[0]
 
 
 def draw_tax_square_numbers(page, height: int, x: list[int], value: float) -> None:
