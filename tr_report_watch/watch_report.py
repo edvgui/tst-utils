@@ -87,7 +87,7 @@ def google_drive_webhook_callback():
 
     if (
         resourceState == "update"
-        and resourceChange == "children"
+        and resourceChange in ["children", "properties"]
         and channel_id == drive_watcher.channel["id"]
     ):
         # Only trigger tst_utils script if a new file is added in folder

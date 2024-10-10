@@ -39,7 +39,8 @@ def prepare_qr_code(
             iban="BE39679200229319",
             amount=f"EUR{amount}",
             communication=f"TOB/{nrn}",
-        )
+        ),
+        border=12
     )
 
 
