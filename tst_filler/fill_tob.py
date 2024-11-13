@@ -126,7 +126,7 @@ def fill_tob(
 
     # location and date of signature
     second_page.insert_text(
-        point=pymupdf.Point(81, 588), text=get_current_city(), fontsize=12
+        point=pymupdf.Point(81, 588), text=get_current_city(), fontsize=10
     )
     second_page.insert_text(
         point=pymupdf.Point(181, 588),
