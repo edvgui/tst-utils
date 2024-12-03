@@ -1,7 +1,0 @@
-#/bin/sh
-
-# Resolve the dir where this file belongs
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
-# Compile and run the script
-exec "$SCRIPT_DIR/node" npx ts-node "${SCRIPT_DIR}/fillTob.ts" "$@"

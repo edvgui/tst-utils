@@ -1,2 +1,0 @@
-qrcode[pil]==7.4.2
-click==8.1.7
