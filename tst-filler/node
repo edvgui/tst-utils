@@ -10,5 +10,5 @@ exec podman run \
     --volume "$(pwd):$(pwd):z" \
     -w "$(pwd)" \
     -e NPM_CONFIG_UPDATE_NOTIFIER=false \
-    node:latest \
+    node:20 \
     "$@"
